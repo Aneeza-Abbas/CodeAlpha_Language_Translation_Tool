@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>CodeAlpha - Language Translator</title>
+
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        padding: 24px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: Arial, Helvetica, sans-serif;
+        color: #20243a;
+        background: linear-gradient(135deg, #e8efff, #f5eaff);
+      }
+
+      .container {
+        width: 100%;
+        max-width: 850px;
+        padding: 35px;
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 15px 45px rgba(36, 42, 90, 0.14);
+      }
+
+      .header {
+        margin-bottom: 28px;
+        text-align: center;
+      }
+
+      .logo {
+        margin-bottom: 8px;
+        font-size: 42px;
+      }
+
+      h1 {
+        margin: 0 0 10px;
+        color: #5146d8;
+        font-size: 30px;
+      }
+
+      .subtitle {
+        margin: 0;
+        color: #697086;
+        line-height: 1.6;
+      }
+
+      .language-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+        margin-bottom: 22px;
+      }
+
+      .field {
+        display: flex;
+        flex-direction: column;
+        gap: 9px;
+      }
+
+      label {
+        font-size: 14px;
+        font-weight: bold;
+      }
+
+      select,
+      textarea {
+        width: 100%;
+        padding: 13px;
+        border: 1px solid #d9ddeb;
+        border-radius: 10px;
+        background: white;
+        color: #20243a;
+        font-family: inherit;
+        font-size: 15px;
+      }
+
+      select:focus,
+      textarea:focus {
+        outline: 2px solid #8077ff;
+        border-color: #5146d8;
+      }
+
+      textarea {
+        min-height: 175px;
+        resize: vertical;
+        line-height: 1.6;
+      }
+
+      .translate-button {
+        width: 100%;
+        margin-top: 20px;
+        padding: 15px;
+        border: none;
+        border-radius: 10px;
+        background: #5146d8;
+        color: white;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+
+      .translate-button:hover {
+        background: #3930ad;
+      }
+
+      .result {
+        margin-top: 25px;
+        padding: 20px;
+        border: 1px solid #c9e9d5;
+        border-radius: 12px;
+        background: #f0fff5;
+      }
+
+      .result h2 {
+        margin: 0 0 12px;
+        color: #187746;
+        font-size: 20px;
+      }
+
+      .result p {
+        margin: 0;
+        line-height: 1.7;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+      }
+
+      .error {
+        margin-top: 20px;
+        padding: 14px;
+        border: 1px solid #f2c5c8;
+        border-radius: 10px;
+        background: #fff0f0;
+        color: #a51f2b;
+        line-height: 1.5;
+      }
+
+      .footer {
+        margin-top: 25px;
+        color: #81869a;
+        font-size: 12px;
+        line-height: 1.6;
+        text-align: center;
+      }
+
+      @media (max-width: 600px) {
+        .container {
+          padding: 22px;
+        }
+
+        .language-row {
+          grid-template-columns: 1fr;
+        }
+
+        h1 {
+          font-size: 25px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <main class="container">
+      <header class="header">
+        <div class="logo">🌍</div>
+        <h1>Language Translator</h1>
+
+        <p class="subtitle">
+          Translate text between languages with a simple, easy-to-use interface.
+        </p>
+      </header>
+
+      <form action="/translate" method="POST">
+        <div class="language-row">
+          <div class="field">
+            <label for="source">Translate from</label>
+
+            <select id="source" name="source" required>
+              {% for code, name in languages.items() %} {% if source == code %}
+              <option value="{{ code }}" selected>{{ name }}</option>
+              {% else %}
+              <option value="{{ code }}">{{ name }}</option>
+              {% endif %} {% endfor %}
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="target">Translate to</label>
+
+            <select id="target" name="target" required>
+              {% for code, name in languages.items() %} {% if target == code %}
+              <option value="{{ code }}" selected>{{ name }}</option>
+              {% else %}
+              <option value="{{ code }}">{{ name }}</option>
+              {% endif %} {% endfor %}
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="text">Enter your text</label>
+
+          <textarea
+            id="text"
+            name="text"
+            placeholder="Type your text here..."
+            required
+          >
+{{ text }}</textarea
+          >
+        </div>
+
+        <button class="translate-button" type="submit">Translate Text</button>
+      </form>
+
+      {% if translated_text %}
+      <section class="result" aria-live="polite">
+        <h2>Translation Result</h2>
+        <p>{{ translated_text }}</p>
+      </section>
+      {% endif %} {% if error %}
+      <div class="error" role="alert">{{ error }}</div>
+      {% endif %}
+
+      <footer class="footer">
+        CodeAlpha Internship Project<br />
+        Language Translation Tool
+      </footer>
+    </main>
+  </body>
+</html>
